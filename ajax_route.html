@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>原生路由</title>
+    </head>
+    <body>
+
+	<ul>
+		<li><a href="#first">链接1</a> </li>
+		<li><a href="#second">链接2</a></li>
+		<li><a href="#third">链接3</a></li>
+	</ul>
+
+<div id="d1">
+	
+</div>
+
+
+
+<script type="text/javascript">
+//获取地址栏中锚点的内容
+	window.addEventListener("hashchange",function(){
+		console.log(location.hash);
+		var hash = location.hash;
+		//获取div节点
+		var d1 = document.getElementById("d1");
+		// switch(hash){
+		// 	case "#first":
+		// 	d1.innerHTML = "我是first链接显示";break;
+		// case "#second":
+		// 	d1.innerHTML = "我是second链接显示";break;
+		// case "#third":
+		// 	d1.innerHTML = "我third链接显示";break;
+
+		// }
+	
+	var xhr = new XMLHttpRequest();
+	hash=hash.substr(1);
+	var url = "data.php?hash="+hash;
+	console.log(url);
+
+	xhr.open("get",url);
+	xhr.send();
+	xhr.onreadystatechange = function(){
+		if(xhr.readyState==4&&xhr.status==200){
+			var result = xhr.responseText;
+			console.log(result);
+			d1.innerHTML = result;
+		}
+	}
+
+});
+
+</script>
+
+
+    </body>
+</html>

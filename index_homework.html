@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tab 标签</title>
+    <style>
+
+		body {
+			margin: 0;
+			padding: 0;
+			background-color: #F7F7F7;
+		}
+	
+		.tabs {
+			width: 400px;
+			margin: 30px auto;
+			background-color: #FFF;
+			border: 1px solid #C0DCC0;
+			box-sizing: border-box;
+		}
+
+		.tabs nav {
+			height: 40px;
+			text-align: center;
+			line-height: 40px;
+			overflow: hidden;
+			background-color: #C0DCC0;
+			display: flex;
+		}
+
+		nav a {
+			display: block;
+			width: 100px;
+			border-right: 1px solid #FFF;
+			color: #000;
+			text-decoration: none;
+		}
+
+		nav a:last-child {
+			border-right: 0 none;
+		}
+
+		nav a.active {
+			background-color: #9BAF9B;
+		}
+		/* nav a:hover{background: #ccc;} */
+		
+		.cont {
+			overflow: hidden;
+			/*display: none;*/
+		}
+
+		.cont ol {
+			line-height: 30px;
+		}
+		.sky{background: skyblue;}
+
+    </style>
+
+    <!--[if lte IE 6]>
+    	
+    <![endif]-->
+<script src="angular.min.js"></script>
+<script src="angular-route.js"></script>
+</head>
+<body ng-app="app">
+
+	<div class="tabs">
+		<nav ng-controller="ctr" id="nav">
+			<a href="#1" ng-class="{sky:isActive(1)}" ng-click="func(1)">国内新闻</a>
+			<a href="#2" ng-class="{sky:isActive(2)}" ng-click="func(2)">国际新闻</a>
+			<a href="#3" ng-class="{sky:isActive(3)}" ng-click="func(3)">体育新闻</a>
+			<a href="#4" ng-class="{sky:isActive(4)}" ng-click="func(4)">娱乐新闻</a>
+        </nav>
+
+       <div ng-view></div>
+
+</div>
+	
+    
+    
+</body>
+
+<script type="text/javascript">
+
+	var app = angular.module("app",["ngRoute"]);
+	app.controller("ctr",["$scope","$http","$routeParams",function($scope,$http,$routeParams){
+		var id = $routeParams.id;
+		console.log(id);
+		$scope.func = function(param){//tab切换的事件
+			if(param==1){
+				$scope.currentTab = 1;
+			}
+			else if(param==2){
+				$scope.currentTab =2;
+			}
+			else if (param==3){
+				$scope.currentTab =3;
+			}
+			else {$scope.currentTab=4;}
+		};
+		$scope.isActive = function(pNum){return pNum == $scope.currentTab;};
+
+		$http({
+			method:"GET",
+			url:"news.php",
+			params:{number:id}
+		}).then(function(result){
+			$scope.news = result;
+		});
+	
+	}]);
+
+	app.config(["$routeProvider",function($routeProvider){
+		$routeProvider
+		.when("/:id",{templateUrl:"news_list.html",controller:"ctr"});
+	}]);
+
+
+</script>
+</html>

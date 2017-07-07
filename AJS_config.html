@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>config配置</title>
+        <script src="angular.min.js"></script>
+    </head>
+    <body ng-app="app">
+
+
+
+<div ng-controller="ctr">
+	
+{{msg}}
+
+</div>
+
+
+
+
+
+
+    </body>
+    <script type="text/javascript">
+    var app = angular.module("app",[]);
+   
+    app.controller("ctr",["$scope","$filter",function($scope,$filter){
+    	var upp = $filter("initcase");
+    	$scope.msg = upp("abc");
+    	
+    }]);
+     //给filter添加一个首字母大写的方法
+    //通过调用config方法，在启动之前进行配置
+    //config只有一个参数，即数组参数，里面包含依赖的对象及功能
+    app.config(["$filterProvider",function($filterProvider){
+    	$filterProvider.register("initcase",function(){
+    		return function(str){
+    			return str.slice(0,1).toUpperCase()+str.slice(1);
+    		}
+    	});
+    }]);
+
+
+
+
+
+    </script>
+</html>

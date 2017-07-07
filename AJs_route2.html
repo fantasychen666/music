@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>AngularJs路由</title>
+        <script src="angular.min.js"></script>
+        <script src="angular-route.js"></script>
+    </head>
+    <body ng-app="app">
+
+	<ul>
+		<li><a href="#/">首页</a></li>
+		<li><a href="#/first">链接1</a> </li>
+		<li><a href="#/second">链接2</a></li>
+		<li><a href="#/third">链接3</a></li>
+		<li><a href="#/four">链接外部文件</a></li>
+		<li><a href="#/five">点击显示控制器内容</a></li>
+	</ul>
+<div ng-controller="ctr">
+	<button type="button" ng-click="click()">点击获取php数据</button>
+</div>
+<div id="d1"  ng-view>
+	ng-view是一个视图模板的指令，指令返回的数据在该指令所在的节点显示
+	也可以成为布局模板，路由匹配的数据(视图)会加载并渲染到该区域
+</div>
+
+
+
+<script type="text/javascript">
+	//声明app应用时，需要用到路由，所以在数组里添加依赖
+	var app = angular.module("app",["ngRoute"]);
+
+	//使用路由之前需要对路由进行配置
+	app.controller("ctr",["$scope","$http",function($scope,$http){
+		$scope.names = ["jack","alice","john","Brown"];
+		// 发送http请求，请求经过php返回一个数组，然后展示在页面
+		$scope.click=function(){
+			$http({
+			method:"GET",
+			url:"config_first.php"}).success(function(result){
+				$scope.names = result;
+			});
+		};
+	}]);
+	app.config(["$routeProvider",function($routeProvider){
+		$routeProvider
+		.when("/",{template:"<h1>这是首页的内容</h1>"})
+		.when("/first",{template:"<input type=\"text\" placeholder='请输入用户名' required />"})
+		.when("/second",{template:"<input type=\"password\"/>"})
+		.when("/third",{template:"<h2>这是链接3页面</h2>"})
+		.when("/four",{templateUrl:"AJs_outer_route.html"})
+		.when("/five",{templateUrl:"AJs_templateURL_ctr.html",
+						controller:"ctr"})
+		.otherwise({redirectTo:"/"});//重定向，用于路由的跳转，至"/"
+	}]);
+
+
+
+
+</script>
+
+
+    </body>
+</html>
